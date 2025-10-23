@@ -120,11 +120,11 @@ async def scrape_mercado_livre(produto, max_itens=10):
                 # =============================================================
 
                 resultados.append({
-                    "principal": titulo,
+                    "concorrente": titulo,
                     "Preço": preco,
                     "Loja": loja,
                     "qtd_vendida": qtd_vendida,
-                    "concorrente": produto,
+                    "principal": produto,
                     "link": link
                 })
             finally:
@@ -135,7 +135,7 @@ async def scrape_mercado_livre(produto, max_itens=10):
 
 
 def salvar_csv(produtos, arquivo):
-    campos = ["principal", "Preço", "Loja", "qtd_vendida", "link", "concorrente"]
+    campos = ["concorrente", "Preço", "Loja", "qtd_vendida", "link", "principal"]
     with open(arquivo, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=campos)
         writer.writeheader()
@@ -147,7 +147,7 @@ def salvar_excel(produtos, arquivo):
     wb = Workbook()
     ws = wb.active
     ws.title = "Produtos"
-    campos = ["principal", "Preço", "Loja", "qtd_vendida", "link", "concorrente"]
+    campos = ["concorrente", "Preço", "Loja", "qtd_vendida", "link", "principal"]
     ws.append(campos)
     for p in produtos:
         ws.append([p[c] for c in campos])
