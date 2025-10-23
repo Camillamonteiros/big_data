@@ -4,7 +4,7 @@ import re
 from django.conf import settings
 from datetime import datetime
 
-API_KEY = "Inserir Key"
+API_KEY = ""
 MODELO = "openai/gpt-oss-20b"
 
 client = Groq(api_key=API_KEY)

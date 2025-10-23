@@ -10,8 +10,8 @@ import pandas as pd
 OUTPUT_DIR = Path("output")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-OUTPUT_CSV = OUTPUT_DIR / "dados5.csv"
-OUTPUT_XLSX = OUTPUT_DIR / "dados5.xlsx"
+OUTPUT_CSV = OUTPUT_DIR / "dados.csv"
+OUTPUT_XLSX = OUTPUT_DIR / "dados.xlsx"
 
 # === Funções existentes ===
 async def extrair_jsonld(detail_page):
@@ -141,11 +141,11 @@ async def scrape_mercado_livre(produto, max_itens=20):
                 qtd_vendida = qtd_vendida or "Não informado"
 
                 resultados.append({
-                    "Titulo": titulo,
+                    "principal": titulo,
                     "Preço": preco,
                     "Loja": loja,
                     "qtd_vendida": qtd_vendida,
-                    "Oficial": "Smart Tv 32'' LG Hd 32LR600BPSA Processador 5 Ger6 Alexa Webos",
+                    "concorrente": "Smart Tv De 43 LG Tu801c 43tu801c0sa Com Tela Led 4k - Preto",
                     "link": link
                 })
 
@@ -161,7 +161,7 @@ async def scrape_mercado_livre(produto, max_itens=20):
         return resultados
 
 def salvar_csv(produtos, arquivo=OUTPUT_CSV):
-    campos = ["Titulo", "Preço", "Loja", "qtd_vendida", "link","Oficial"]
+    campos = ["principal", "Preço", "Loja", "qtd_vendida", "link","concorrente"]
     with open(arquivo, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=campos)
         writer.writeheader()
@@ -173,7 +173,7 @@ def salvar_excel(produtos, arquivo=OUTPUT_XLSX):
     ws = wb.active
     ws.title = "Produtos"
 
-    campos = ["Titulo", "Preço", "Loja", "qtd_vendida", "link","Oficial"]
+    campos = ["principal", "Preço", "Loja", "qtd_vendida", "link","concorrente"]
     ws.append(campos)
 
     for p in produtos:
@@ -184,12 +184,12 @@ def salvar_excel(produtos, arquivo=OUTPUT_XLSX):
 
 # === Execução principal ===
 if __name__ == "__main__":
-    termo = "Smart Tv 32'' LG Hd 32LR600BPSA Processador 5 Ger6 Alexa Webos"
-    produtos = asyncio.run(scrape_mercado_livre(termo, max_itens=20))
+    termo = "Smart Tv De 43 LG Tu801c 43tu801c0sa Com Tela Led 4k - Preto"
+    produtos = asyncio.run(scrape_mercado_livre(termo, max_itens=10))
 
     print("\n📋 Produtos coletados:")
     for i, p in enumerate(produtos, start=1):
-        print(f"{i}. {p['Titulo']} | Preço: {p['Preço']} | Loja: {p['Loja']} | Vendidos: {p['qtd_vendida']}")
+        print(f"{i}. {p['principal']} | Preço: {p['Preço']} | Loja: {p['Loja']} | Vendidos: {p['qtd_vendida']}")
 
     salvar_csv(produtos)
     salvar_excel(produtos)
